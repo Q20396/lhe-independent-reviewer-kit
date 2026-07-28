@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:independent-reviewer-kit:review-request:1.0.0",
+  "title": "Independent Review Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "review_id",
+    "repository_locator",
+    "base",
+    "candidate",
+    "changed_paths",
+    "changed_paths_sha256",
+    "review_contract_bytes_sha256",
+    "reviewer_kit_commit",
+    "reviewer_kit_tree",
+    "requested_checks"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "review_id": {"type": "string", "pattern": "^IRR-[A-Z0-9-]+$"},
+    "repository_locator": {"type": "string", "minLength": 1},
+    "base": {"$ref": "#/$defs/git_identity"},
+    "candidate": {"$ref": "#/$defs/git_identity"},
+    "changed_paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "changed_paths_sha256": {"$ref": "#/$defs/sha256"},
+    "review_contract_bytes_sha256": {"$ref": "#/$defs/sha256"},
+    "reviewer_kit_commit": {"$ref": "#/$defs/git_sha"},
+    "reviewer_kit_tree": {"$ref": "#/$defs/git_sha"},
+    "requested_checks": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "git_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "tree"],
+      "properties": {
+        "commit": {"$ref": "#/$defs/git_sha"},
+        "tree": {"$ref": "#/$defs/git_sha"}
+      }
+    }
+  }
+}

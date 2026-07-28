@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:independent-reviewer-kit:evidence-manifest:1.0.0",
+  "title": "Independent Review Evidence Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "review_id", "review_request_sha256", "reviewer_kit_commit", "reviewer_kit_tree", "candidate_commit", "candidate_tree", "evidence"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "review_id": {"type": "string", "pattern": "^IRR-[A-Z0-9-]+$"},
+    "review_request_sha256": {"$ref": "#/$defs/sha256"},
+    "reviewer_kit_commit": {"$ref": "#/$defs/git_sha"},
+    "reviewer_kit_tree": {"$ref": "#/$defs/git_sha"},
+    "candidate_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "candidate_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/evidence_item"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "kind", "claim_direction", "raw_artifact_locator", "raw_artifact_sha256", "limitations"],
+      "properties": {
+        "evidence_id": {"type": "string", "pattern": "^EVID-[A-Z0-9-]+$"},
+        "kind": {"enum": ["command", "git_object", "ci_run", "provider_artifact"]},
+        "claim_direction": {"enum": ["supports", "refutes", "neutral"]},
+        "raw_artifact_locator": {"type": "string", "minLength": 1},
+        "raw_artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "limitations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

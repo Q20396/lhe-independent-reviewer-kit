@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:independent-reviewer-kit:review-verdict:1.0.0",
+  "title": "Independent Review Verdict",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "review_id",
+    "review_request_sha256",
+    "evidence_manifest_sha256",
+    "reviewer_kit_commit",
+    "reviewer_kit_tree",
+    "candidate_commit",
+    "candidate_tree",
+    "verdict",
+    "findings",
+    "limitations",
+    "human_disposition",
+    "promotion_state",
+    "next_stage_authorized"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "review_id": {"type": "string", "pattern": "^IRR-[A-Z0-9-]+$"},
+    "review_request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evidence_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewer_kit_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "reviewer_kit_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "candidate_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "candidate_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "verdict": {"enum": ["ACCEPT", "CHANGES_REQUIRED", "BLOCKED"]},
+    "findings": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/finding"}},
+    "limitations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "human_disposition": {"const": "pending"},
+    "promotion_state": {"const": "not-promoted"},
+    "next_stage_authorized": {"const": false}
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_id", "severity", "epistemic_status", "evidence_ids", "summary"],
+      "properties": {
+        "finding_id": {"type": "string", "pattern": "^FIND-[A-Z0-9-]+$"},
+        "severity": {"enum": ["P0", "P1", "P2", "P3"]},
+        "epistemic_status": {"enum": ["FACT", "INFERENCE", "UNKNOWN"]},
+        "evidence_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^EVID-[A-Z0-9-]+$"}},
+        "summary": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
