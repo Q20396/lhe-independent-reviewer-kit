@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://q20396.github.io/lhe-independent-reviewer-kit/schemas/review-catalog.schema.json",
+  "title": "Independent Review Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "catalog_id", "modules", "components"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "catalog_id": {"type": "string", "pattern": "^CAT-[A-Z0-9-]+$"},
+    "modules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/module"}
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/component"}
+    }
+  },
+  "$defs": {
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "version", "source_locator", "targets", "dependencies", "cost", "stability", "invocation_mode", "required_permissions", "side_effects", "network_behavior", "hook_behavior", "persistence_behavior", "evidence_outputs", "limitations", "rollback", "verification_state", "review_packs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "kind": {"const": "review_module"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "source_locator": {"type": "string", "pattern": "^[a-z][a-z0-9+.-]*://"},
+        "targets": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "dependencies": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}},
+        "cost": {"enum": ["light", "medium", "heavy"]},
+        "stability": {"enum": ["experimental", "stable"]},
+        "invocation_mode": {"enum": ["user_only", "model_eligible"]},
+        "required_permissions": {"type": "array", "uniqueItems": true, "items": {"enum": ["git_object_read", "artifact_read"]}},
+        "side_effects": {"const": "none"},
+        "network_behavior": {"const": "forbidden"},
+        "hook_behavior": {"const": "forbidden"},
+        "persistence_behavior": {"const": "forbidden"},
+        "evidence_outputs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["diagnostic_report", "recommendation_envelope"]}},
+        "limitations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "rollback": {"const": "not_applicable"},
+        "verification_state": {"enum": ["declared", "unverified"]},
+        "review_packs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}}
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "modules"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9:-]*$"},
+        "family": {"enum": ["baseline", "architecture", "provider", "release"]},
+        "modules": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}}
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://q20396.github.io/lhe-independent-reviewer-kit/schemas/review-profile.schema.json",
+  "title": "Independent Review Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "components", "human_disposition", "next_stage_authorized"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "profile_id": {"enum": ["minimal-verification", "architecture-review", "provider-intake", "release-review"]},
+    "components": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9:-]*$"}},
+    "human_disposition": {"const": "pending"},
+    "next_stage_authorized": {"const": false}
+  }
+}
