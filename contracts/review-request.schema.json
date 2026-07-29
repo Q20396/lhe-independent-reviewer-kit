@@ -12,6 +12,7 @@
     "candidate",
     "changed_paths",
     "changed_paths_sha256",
+    "candidate_object_delta_sha256",
     "review_contract_bytes_sha256",
     "reviewer_kit_commit",
     "reviewer_kit_tree",
@@ -30,6 +31,7 @@
       "items": {"type": "string", "minLength": 1}
     },
     "changed_paths_sha256": {"$ref": "#/$defs/sha256"},
+    "candidate_object_delta_sha256": {"$ref": "#/$defs/sha256"},
     "review_contract_bytes_sha256": {"$ref": "#/$defs/sha256"},
     "reviewer_kit_commit": {"$ref": "#/$defs/git_sha"},
     "reviewer_kit_tree": {"$ref": "#/$defs/git_sha"},
