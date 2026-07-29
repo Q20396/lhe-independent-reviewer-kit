@@ -12,6 +12,7 @@ from typing import Any
 
 from verify_candidate_identity import (
     is_safe_repository_path,
+    derive_target_identity,
     read_runtime_identity,
     validate_request_structure,
 )
@@ -25,7 +26,7 @@ ALLOWED_KINDS = {"command", "git_object", "ci_run", "provider_artifact"}
 ALLOWED_DIRECTIONS = {"supports", "refutes", "neutral"}
 MANIFEST_FIELDS = {
     "schema_version", "review_id", "review_request_sha256", "reviewer_kit_commit",
-    "reviewer_kit_tree", "candidate_commit", "candidate_tree", "evidence",
+    "reviewer_kit_tree", "candidate_commit", "candidate_tree", "candidate_object_delta_sha256", "evidence",
 }
 EVIDENCE_FIELDS = {
     "evidence_id", "kind", "claim_direction", "raw_artifact_locator",
@@ -34,6 +35,7 @@ EVIDENCE_FIELDS = {
 VERDICT_FIELDS = {
     "schema_version", "review_id", "review_request_sha256", "evidence_manifest_sha256",
     "reviewer_kit_commit", "reviewer_kit_tree", "candidate_commit", "candidate_tree",
+    "candidate_object_delta_sha256",
     "verdict", "findings", "limitations", "human_disposition", "promotion_state",
     "next_stage_authorized",
 }
@@ -57,7 +59,8 @@ def resolve_artifact(root: Path, locator: Any) -> Path | None:
 
 
 def validate_runtime_binding(
-    request: Any, runtime_identity: dict[str, str] | None, review_contract_bytes_sha256: str | None
+    request: Any, runtime_identity: dict[str, str] | None, review_contract_bytes_sha256: str | None,
+    target_identity: dict[str, Any] | None,
 ) -> list[str]:
     if validate_request_structure(request):
         return ["REVIEW_REQUEST_INVALID"]
@@ -71,6 +74,16 @@ def validate_runtime_binding(
         reasons.append("REVIEW_CONTRACT_HASH_INVALID")
     elif review_contract_bytes_sha256 != request["review_contract_bytes_sha256"]:
         reasons.append("REVIEW_CONTRACT_HASH_MISMATCH")
+    if target_identity is None:
+        reasons.append("TARGET_IDENTITY_REQUIRED")
+    elif runtime_identity is not None and isinstance(review_contract_bytes_sha256, str) and SHA256.fullmatch(review_contract_bytes_sha256):
+        actual = {
+            **target_identity,
+            **runtime_identity,
+            "review_contract_bytes_sha256": review_contract_bytes_sha256,
+        }
+        from verify_candidate_identity import validate
+        reasons.extend(validate(request, actual))
     return sorted(set(reasons))
 
 
@@ -112,6 +125,10 @@ def validate(manifest: Any, request: Any, artifact_root: Path) -> list[str]:
             reasons.append(f"{name.upper()}_INVALID")
         elif isinstance(request_candidate, dict) and manifest[name] != request_candidate.get(name.removeprefix("candidate_")):
             reasons.append(f"{name.upper()}_MISMATCH")
+    if not isinstance(manifest["candidate_object_delta_sha256"], str) or not SHA256.fullmatch(manifest["candidate_object_delta_sha256"]):
+        reasons.append("CANDIDATE_OBJECT_DELTA_SHA256_INVALID")
+    elif manifest["candidate_object_delta_sha256"] != request["candidate_object_delta_sha256"]:
+        reasons.append("CANDIDATE_OBJECT_DELTA_SHA256_MISMATCH")
     evidence = manifest["evidence"]
     if not isinstance(evidence, list) or not evidence:
         return reasons + ["EVIDENCE_REQUIRED"]
@@ -185,6 +202,10 @@ def validate_verdict(verdict: Any, request: Any, manifest: Any, artifact_root: P
             reasons.append(f"VERDICT_{name.upper()}_INVALID")
         elif verdict[name] != request["candidate"][request_name] or verdict[name] != manifest[name]:
             reasons.append(f"VERDICT_{name.upper()}_MISMATCH")
+    if not isinstance(verdict["candidate_object_delta_sha256"], str) or not SHA256.fullmatch(verdict["candidate_object_delta_sha256"]):
+        reasons.append("VERDICT_CANDIDATE_OBJECT_DELTA_SHA256_INVALID")
+    elif verdict["candidate_object_delta_sha256"] != request["candidate_object_delta_sha256"] or verdict["candidate_object_delta_sha256"] != manifest["candidate_object_delta_sha256"]:
+        reasons.append("VERDICT_CANDIDATE_OBJECT_DELTA_SHA256_MISMATCH")
     if not isinstance(verdict["verdict"], str) or verdict["verdict"] not in {"ACCEPT", "CHANGES_REQUIRED", "BLOCKED"}:
         reasons.append("VERDICT_VALUE_INVALID")
     if verdict["human_disposition"] != "pending" or verdict["promotion_state"] != "not-promoted" or verdict["next_stage_authorized"] is not False:
@@ -238,14 +259,17 @@ def main() -> int:
     parser.add_argument("--verdict", type=Path)
     parser.add_argument("--kit-root", type=Path, default=ROOT)
     parser.add_argument("--review-contract", type=Path, required=True)
+    parser.add_argument("--target-root", type=Path, required=True)
+    parser.add_argument("--base-commit", required=True)
     args = parser.parse_args()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     request = json.loads(args.request.read_text(encoding="utf-8"))
-    runtime_identity = read_runtime_identity(args.kit_root)
+    runtime_identity = read_runtime_identity(args.kit_root, args.review_contract)
     contract_sha256 = None
     if args.review_contract.is_file():
         contract_sha256 = hashlib.sha256(args.review_contract.read_bytes()).hexdigest()
-    reasons = validate_runtime_binding(request, runtime_identity, contract_sha256)
+    target_identity, target_reasons = derive_target_identity(args.target_root, args.base_commit, args.kit_root)
+    reasons = target_reasons or validate_runtime_binding(request, runtime_identity, contract_sha256, target_identity)
     if not reasons:
         reasons = validate(manifest, request, args.artifact_root)
     if not reasons and args.verdict:
