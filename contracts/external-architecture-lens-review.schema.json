@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://q20396.github.io/lhe-independent-reviewer-kit/schemas/external-architecture-lens-review.schema.json",
+  "title": "External Architecture Lens Review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifact_ids", "status", "findings", "limitations", "next_safe_action", "external_installation_required", "external_execution_required", "network_behavior", "hook_behavior", "persistence_behavior", "human_disposition", "next_stage_authorized"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "artifact_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^EXT-ART-[A-Z0-9-]+$"}},
+    "status": {"enum": ["blocked", "unverified", "requires_human_decision"]},
+    "findings": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/finding"}},
+    "limitations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "next_safe_action": {"type": "string", "minLength": 1},
+    "external_installation_required": {"const": false},
+    "external_execution_required": {"const": false},
+    "network_behavior": {"const": "forbidden"},
+    "hook_behavior": {"const": "forbidden"},
+    "persistence_behavior": {"const": "forbidden"},
+    "human_disposition": {"const": "pending"},
+    "next_stage_authorized": {"const": false}
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_id", "classification", "statement", "evidence_refs", "disposition", "recommended_target"],
+      "properties": {
+        "finding_id": {"type": "string", "pattern": "^LENS-[A-Z0-9-]+$"},
+        "classification": {"enum": ["INFERENCE", "UNKNOWN"], "description": "Opaque supplied artifacts cannot support FACT claims."},
+        "statement": {"type": "string", "minLength": 1},
+        "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^EXT-ART-[A-Z0-9-]+:EXT-EV-[A-Z0-9-]+$"}},
+        "disposition": {"enum": ["adopt", "reject", "defer"]},
+        "recommended_target": {"enum": ["reviewer_kit", "lhe_proposal_only", "defer"]}
+      },
+      "allOf": [{"if": {"properties": {"classification": {"const": "INFERENCE"}}}, "then": {"properties": {"evidence_refs": {"minItems": 1}}}}]
+    }
+  }
+}
