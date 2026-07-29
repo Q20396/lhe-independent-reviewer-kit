@@ -1,0 +1,73 @@
+{
+  "catalog": {
+    "schema_version": "1.0.0",
+    "catalog_id": "CAT-REVIEW-001",
+    "modules": [
+      {
+        "id": "target-identity",
+        "kind": "review_module",
+        "version": "1.0.0",
+        "source_locator": "local://kernel/target-identity",
+        "targets": ["generic-agent-skills"],
+        "dependencies": [],
+        "cost": "light",
+        "stability": "stable",
+        "invocation_mode": "user_only",
+        "required_permissions": ["git_object_read", "artifact_read"],
+        "side_effects": "none",
+        "network_behavior": "forbidden",
+        "hook_behavior": "forbidden",
+        "persistence_behavior": "forbidden",
+        "evidence_outputs": ["diagnostic_report"],
+        "limitations": ["Does not prove human independence."],
+        "rollback": "not_applicable",
+        "verification_state": "declared",
+        "review_packs": ["target-identity"]
+      },
+      {
+        "id": "architecture-lenses",
+        "kind": "review_module",
+        "version": "1.0.0",
+        "source_locator": "local://review-packs/architecture",
+        "targets": ["generic-agent-skills"],
+        "dependencies": ["target-identity"],
+        "cost": "light",
+        "stability": "experimental",
+        "invocation_mode": "user_only",
+        "required_permissions": ["git_object_read"],
+        "side_effects": "none",
+        "network_behavior": "forbidden",
+        "hook_behavior": "forbidden",
+        "persistence_behavior": "forbidden",
+        "evidence_outputs": ["diagnostic_report", "recommendation_envelope"],
+        "limitations": ["External tools are comparative sources only."],
+        "rollback": "not_applicable",
+        "verification_state": "unverified",
+        "review_packs": ["lhe-governance", "ecc-productization", "graph-context-provenance", "workstream-resilience"]
+      }
+    ],
+    "components": [
+      {"id": "baseline:identity", "family": "baseline", "modules": ["target-identity"]},
+      {"id": "architecture:external-lenses", "family": "architecture", "modules": ["architecture-lenses"]}
+    ]
+  },
+  "profile": {
+    "schema_version": "1.0.0",
+    "profile_id": "architecture-review",
+    "components": ["baseline:identity", "architecture:external-lenses"],
+    "human_disposition": "pending",
+    "next_stage_authorized": false
+  },
+  "advisor": {
+    "schema_version": "1.0.0",
+    "status": "requires_human_decision",
+    "profile_id": "architecture-review",
+    "selected_modules": ["target-identity", "architecture-lenses"],
+    "required_permissions": ["git_object_read", "artifact_read"],
+    "missing_evidence": ["External review-pack implementation is not available."],
+    "limitations": ["This is a synthetic static fixture."],
+    "next_safe_action": "Request an implementation envelope for one review pack.",
+    "human_disposition": "pending",
+    "next_stage_authorized": false
+  }
+}
