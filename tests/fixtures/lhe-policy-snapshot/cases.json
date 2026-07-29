@@ -1,0 +1,30 @@
+{
+  "snapshot": {
+    "schema_version": "1.0.0",
+    "snapshot_id": "LHE-SNAPSHOT-TEST-001",
+    "source_repository_locator": "supplied://example/lhe",
+    "commit": "1111111111111111111111111111111111111111",
+    "tree": "2222222222222222222222222222222222222222",
+    "selected_paths": [{"path": "SKILL.md", "blob_oid": "3333333333333333333333333333333333333333", "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}],
+    "path_inventory_sha256": "f2a521beb66a8342bb1c81f698cf80c803aaa116d41b063a9269740d5b07de5c",
+    "retrieved_at": "2026-07-29T00:00:00Z",
+    "known_limitations": ["Synthetic fixture; does not prove live LHE behavior."],
+    "policy_claims": {"allowed_permissions": ["git_object_read", "artifact_read"], "network_behavior": "forbidden", "hook_behavior": "forbidden", "persistence_behavior": "forbidden", "promotion_authority": "none"},
+    "human_disposition": "pending",
+    "next_stage_authorized": false
+  },
+  "response": {
+    "schema_version": "1.0.0",
+    "snapshot_id": "LHE-SNAPSHOT-TEST-001",
+    "snapshot_commit": "1111111111111111111111111111111111111111",
+    "snapshot_tree": "2222222222222222222222222222222222222222",
+    "status": "eligible",
+    "requested_permissions": ["git_object_read"],
+    "requested_behaviors": {"network_behavior": "forbidden", "hook_behavior": "forbidden", "persistence_behavior": "forbidden", "promotion_authority": "none"},
+    "missing_evidence": [],
+    "limitations": ["Eligible does not authorize execution or promotion."],
+    "next_safe_action": "Request human approval before any separate implementation step.",
+    "human_disposition": "pending",
+    "next_stage_authorized": false
+  }
+}
