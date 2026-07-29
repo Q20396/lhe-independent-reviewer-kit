@@ -1,0 +1,16 @@
+{
+  "valid": {
+    "schema_version": "1.0.0",
+    "workstream_id": "AWS-001",
+    "spec_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "target_identity_manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "client_authority_owner": "client",
+    "authorization_state": "pending",
+    "execution_authorized": false,
+    "agents": ["planner", "evaluator"],
+    "effect_budget": {"max_handoffs": 2, "max_tool_calls": 0, "max_tokens": 1000, "allowed_effects": []},
+    "allowed_paths": [],
+    "stop_conditions": ["budget exhausted", "missing evidence"],
+    "evidence_outputs": ["handoff_receipt", "evidence_bundle", "limitation_report"]
+  }
+}
