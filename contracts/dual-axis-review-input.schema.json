@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:independent-reviewer-kit:dual-axis-review-input:1.0.0",
+  "title": "Dual-Axis Independent Review Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "input_id", "review_request_id", "target_candidate_commit", "axes", "requested_checks", "allowed_effects", "human_disposition", "promotion_state", "next_stage_authorized"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "input_id": {"type": "string", "pattern": "^DAI-[A-Z0-9-]+$"},
+    "review_request_id": {"type": "string", "pattern": "^IRR-[A-Z0-9-]+$"},
+    "target_candidate_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "axes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spec", "standards"],
+      "properties": {
+        "spec": {"$ref": "#/$defs/axis"},
+        "standards": {"$ref": "#/$defs/axis"}
+      }
+    },
+    "requested_checks": {"const": ["spec", "standards"]},
+    "allowed_effects": {"const": []},
+    "human_disposition": {"const": "pending"},
+    "promotion_state": {"const": "not-promoted"},
+    "next_stage_authorized": {"const": false}
+  },
+  "$defs": {
+    "axis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["availability", "source"],
+      "properties": {
+        "availability": {"enum": ["provided", "not-available"]},
+        "source": {"type": "object"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"availability": {"const": "provided"}}},
+          "then": {"properties": {"source": {"$ref": "#/$defs/provided_source"}}}
+        },
+        {
+          "if": {"properties": {"availability": {"const": "not-available"}}},
+          "then": {"properties": {"source": {"$ref": "#/$defs/unavailable_source"}}}
+        }
+      ]
+    },
+    "provided_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "locator", "bytes_sha256"],
+      "properties": {
+        "kind": {"enum": ["issue", "pull-request", "repository-file", "external-document"]},
+        "locator": {"type": "string", "minLength": 1},
+        "bytes_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "unavailable_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "locator"],
+      "properties": {
+        "kind": {"const": "none"},
+        "locator": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

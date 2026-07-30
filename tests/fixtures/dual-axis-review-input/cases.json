@@ -1,0 +1,17 @@
+{
+  "valid": {
+    "schema_version": "1.0.0",
+    "input_id": "DAI-WORKFLOW-001",
+    "review_request_id": "IRR-WORKFLOW-001",
+    "target_candidate_commit": "0123456789abcdef0123456789abcdef01234567",
+    "axes": {
+      "spec": {"availability": "provided", "source": {"kind": "repository-file", "locator": "docs/spec.md", "bytes_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}},
+      "standards": {"availability": "not-available", "source": {"kind": "none", "locator": "no documented repository standards supplied"}}
+    },
+    "requested_checks": ["spec", "standards"],
+    "allowed_effects": [],
+    "human_disposition": "pending",
+    "promotion_state": "not-promoted",
+    "next_stage_authorized": false
+  }
+}
