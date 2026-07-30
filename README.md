@@ -41,6 +41,8 @@ semantics.
   reviewer receives.
 - `contracts/evidence-manifest.schema.json` describes raw evidence references.
 - `contracts/review-verdict.schema.json` describes a non-authorizing verdict.
+- `contracts/dual-axis-review-input.schema.json` keeps Spec and Standards
+  review inputs separate, including an explicit `not-available` outcome.
 - `scripts/verify_candidate_identity.py` derives a target `HEAD` candidate,
   base/tree identity, safe changed paths, and a deterministic object delta.
 - `scripts/verify_evidence_manifest.py` checks raw artifact paths and hashes,
@@ -53,6 +55,7 @@ semantics.
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_*.py' -v
 python3 scripts/verify_candidate_identity.py --help
 python3 scripts/verify_evidence_manifest.py --help
+python3 scripts/verify_dual_axis_review_input.py --help
 git diff --check
 ```
 
