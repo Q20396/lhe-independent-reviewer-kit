@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "provider_id": "PROVIDER-WORKER-LANGGRAPH-SWARM-001",
+  "kind": "worker_orchestration_provider",
+  "version": "0.1.0",
+  "status": "declared_disabled",
+  "source_identity": {
+    "intake_status": "public_read_only",
+    "repository_locator": "langchain-ai/langgraph-swarm-py",
+    "commit": "749d4450f248838f4340ec47da16e5a0f14d3078",
+    "tree": "c8cc27206824e024e52d360cf3005bc4f9efd6be",
+    "parent": "de22626e30844858b5eec1bb6d5a14008db8b773",
+    "source_blobs": [
+      {"path": "pyproject.toml", "sha1": "8c3fe19bbe46b7976815215b1782c7d05e0f6d2e"},
+      {"path": "README.md", "sha1": "6c526dd1ae3e77ca27602492c1f87fe86faf8c83"},
+      {"path": "langgraph_swarm/swarm.py", "sha1": "c6b0609e098a0e117eb860eb9890e823f4b4abe2"},
+      {"path": "langgraph_swarm/handoff.py", "sha1": "620ee51abfed07fcdd3ea2bac7978d3252d6ecc8"}
+    ]
+  },
+  "required_permissions": [],
+  "network_behavior": "forbidden",
+  "hook_behavior": "forbidden",
+  "persistence_behavior": "forbidden",
+  "execution_behavior": "forbidden",
+  "evidence_requirements": [
+    "A future client-approved task, exact dependency closure, platform, model/tool boundary, and isolated-run envelope are required before activation."
+  ],
+  "limitations": [
+    "Public-read-only source intake only; not installed, imported, callable, verified, or selected.",
+    "No model credential, network traffic, tool attachment, checkpoint/store, filesystem write, or external action is authorized."
+  ],
+  "human_disposition": "pending",
+  "next_stage_authorized": false
+}
