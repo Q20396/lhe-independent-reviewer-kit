@@ -1,0 +1,15 @@
+{
+  "valid": {
+    "schema_version": "1.0.0",
+    "map_id": "TBDM-ECC-001",
+    "workstream_capsule_id": "WSC-ECC-001",
+    "spec_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "items": [
+      {"item_id": "TBI-SPEC-001", "title": "Bind the review input", "deliverable": "Validated dual-axis review input", "acceptance_criteria": ["Spec and standards are explicit"], "blocked_by": [], "status": "proposed", "evidence_refs": ["EVID-SPEC-001"], "allowed_effects": [], "execution_authorized": false},
+      {"item_id": "TBI-REVIEW-001", "title": "Prepare review evidence", "deliverable": "Static evidence map", "acceptance_criteria": ["Evidence references are present"], "blocked_by": ["TBI-SPEC-001"], "status": "proposed", "evidence_refs": ["EVID-REVIEW-001"], "allowed_effects": [], "execution_authorized": false}
+    ],
+    "allowed_effects": [],
+    "human_disposition": "pending",
+    "next_stage_authorized": false
+  }
+}
