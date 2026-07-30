@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 PERMS = {"git_object_read", "artifact_read"}
-KINDS = {"graph_provider", "planning_provider", "catalog_provider", "worker_orchestration_provider"}
+KINDS = {"graph_provider", "planning_provider", "catalog_provider", "worker_orchestration_provider", "workflow_pack_provider"}
 MF = {"schema_version", "provider_id", "kind", "version", "status", "source_identity", "required_permissions", "network_behavior", "hook_behavior", "persistence_behavior", "execution_behavior", "evidence_requirements", "limitations", "human_disposition", "next_stage_authorized"}
 DF = {"schema_version", "provider_id", "status", "reason_codes", "observed_evidence", "limitations", "next_safe_action", "human_disposition", "next_stage_authorized"}
 

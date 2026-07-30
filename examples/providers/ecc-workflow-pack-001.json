@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "provider_id": "PROVIDER-WORKFLOW-ECC-001",
+  "kind": "workflow_pack_provider",
+  "version": "2.1.0",
+  "status": "declared_disabled",
+  "source_identity": {
+    "intake_status": "public_read_only",
+    "repository_locator": "affaan-m/ECC",
+    "commit": "e4e4163101f162881e628f300a9ca4e6a940bcea",
+    "tree": "ee9286ffee0a7d559ae1f7e82d91af3d845c81a3",
+    "parent": "591ab5cbd3f2f65860ea91c226e410b1502c8e2e",
+    "source_blobs": [
+      {"path": "README.md", "sha1": "de7cc559100d2af25f1b17d77a59590b13cc3aa8"},
+      {"path": "package.json", "sha1": "6107d724ab113dbadf29c5aa769756011d86d6f5"},
+      {"path": "install.sh", "sha1": "f14c057cd76ec465eadcaee4b64f3d3bf87ef180"},
+      {"path": "workflows/orch-review.workflow.js", "sha1": "3fd502da40d77c46c28e0ed8b6845bb0072393ef"}
+    ]
+  },
+  "required_permissions": [],
+  "network_behavior": "forbidden",
+  "hook_behavior": "forbidden",
+  "persistence_behavior": "forbidden",
+  "execution_behavior": "forbidden",
+  "evidence_requirements": [
+    "Any future ECC trial requires client selection of a task, exact package closure, platform, installation path, permissions, and an isolated-run envelope."
+  ],
+  "limitations": [
+    "Public-read-only source intake only; ECC is not installed, imported, callable, verified, or selected.",
+    "ECC install.sh may install Node dependencies when node_modules is absent; that behavior is forbidden in this manifest.",
+    "Hooks, MCP configuration, credentials, persistence, filesystem changes, network traffic, and external actions are not authorized."
+  ],
+  "human_disposition": "pending",
+  "next_stage_authorized": false
+}
