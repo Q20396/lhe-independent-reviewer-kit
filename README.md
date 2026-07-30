@@ -96,3 +96,12 @@ or establish trust in the host Git executable.
 - network, GitHub API, CI, package, Marketplace, release, or installed-skill
   operations;
 - importing or executing LHE, ECC, Graphify, or Planning with Files.
+
+## Declared-disabled providers
+
+Provider manifests record an externally observed source identity and a zero-effect
+default posture. They do not install, import, invoke, select, or verify a
+provider. [The LangGraph Swarm example](examples/providers/langgraph-swarm-001.json)
+is an intake record only: client approval remains required before any dependency
+resolution, model credential use, network traffic, tool attachment, persistence,
+or execution.
