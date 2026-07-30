@@ -9,8 +9,9 @@ public-read-only intake has bound its repository, commit, tree, parent, and
 selected source blobs. The record is neither an installation instruction nor a
 capability grant.
 
-The LangGraph Swarm example is a worker-orchestration candidate. It remains
-outside the reviewer runtime and has no default effects.
+The LangGraph Swarm example is a worker-orchestration candidate. ECC is a
+workflow-pack candidate with a materially wider installation and runtime
+surface. Both remain outside the reviewer runtime and have no default effects.
 
 ## Required promotion sequence
 
@@ -27,7 +28,9 @@ manifest never makes a provider callable.
 
 ## Non-goals
 
-- installing ECC, LangGraph Swarm, Graphify, or Planning With Files;
+- installing ECC, LangGraph Swarm, Graphify, or Planning With Files. In
+  particular, an ECC installer must not be run because its documented clone
+  path can install Node dependencies;
 - hooks, background scanning, automatic routing, persistent provider state, or
   model/API credential use;
 - changing LHE or making the reviewer kit a worker orchestration runtime.

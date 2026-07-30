@@ -23,3 +23,9 @@ class T(unittest.TestCase):
   self.assertEqual("worker_orchestration_provider",example["kind"])
   self.assertEqual("declared_disabled",example["status"])
   self.assertEqual([],example["required_permissions"])
+ def test_declared_ecc_example_is_disabled(self):
+  example=json.loads((ROOT/"examples/providers/ecc-workflow-pack-001.json").read_text())
+  self.assertEqual([],p.manifest(example))
+  self.assertEqual("workflow_pack_provider",example["kind"])
+  self.assertEqual("declared_disabled",example["status"])
+  self.assertEqual([],example["required_permissions"])

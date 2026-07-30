@@ -105,3 +105,8 @@ provider. [The LangGraph Swarm example](examples/providers/langgraph-swarm-001.j
 is an intake record only: client approval remains required before any dependency
 resolution, model credential use, network traffic, tool attachment, persistence,
 or execution.
+
+[The ECC workflow-pack example](examples/providers/ecc-workflow-pack-001.json)
+is also declared-disabled. ECC exposes installation, hooks, MCP, scripts, and
+multi-platform configuration surfaces; its source identity does not authorize
+any of them.
