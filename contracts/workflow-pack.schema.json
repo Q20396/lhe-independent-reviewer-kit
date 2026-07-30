@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ECC-Inspired Workflow Pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "pack_id", "title", "activation", "spec_required", "workstream_capsule_required", "governance_mode", "inputs", "deliverables", "stop_conditions", "allowed_effects", "client_authority_owner", "execution_authorized"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "pack_id": {"type": "string", "pattern": "^WFP-[A-Z0-9-]+$"},
+    "title": {"type": "string", "minLength": 1},
+    "activation": {"const": "explicit-only"},
+    "spec_required": {"const": true},
+    "workstream_capsule_required": {"const": true},
+    "governance_mode": {"enum": ["not-required", "client-requested", "risk-triggered"]},
+    "inputs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "deliverables": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "stop_conditions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "allowed_effects": {"type": "array", "maxItems": 0},
+    "client_authority_owner": {"const": "client"},
+    "execution_authorized": {"const": false}
+  }
+}
